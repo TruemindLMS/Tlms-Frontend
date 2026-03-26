@@ -1,7 +1,7 @@
 
-import About from "@/components/signin/onboarding/aboutus"
-import Courses from "@/components/signin/onboarding/course"
-import Hero from "@/components/signin/onboarding/hero"
+import About from "@/components/onboarding/aboutus"
+import Courses from "@/components/onboarding/course"
+import Hero from "@/components/onboarding/hero"
 import Signin from "@/components/signin/signin"
 import { Metadata } from "next"
 
@@ -17,7 +17,6 @@ export default function Home() {
       <Hero />
       <Courses />
       <About />
-
 
     </main>
   )
