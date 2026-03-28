@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Topnav from '@/components/onboarding/topnav'
 
 export const metadata: Metadata = {
   title: 'team-india',
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <body>
+        <Topnav />
         {children}
       </body>
     </html>
