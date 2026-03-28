@@ -1,31 +1,30 @@
 import React from 'react';
 import Image from 'next/image';
-import Image1949 from '@/public/img/image1949.jpg';
 
 const Signin = () => {
     return (
         <div className="flex h-screen bg-white">
             {/* Left Image Section */}
             <div className="hidden lg:flex  flex-col space-y-12 w-1/2 bg-gray-100 items-center justify-center">
-                <Image
-                    src={Image1949}
+                <img
+                    src='./img/womans.png'
                     alt="Sign in"
                     width={500}
                     height={500}
-                    className="object-cover w-auto h-auto rounded-lg shadow-lg"
+                    className="object-cover w-auto h-auto rounded-lg"
                 />
-                <h1 className="text-5xl font-bold text-gray-800 mb-2 text-center">Learn and grow at <br/> your own pace </h1>
+                <h1 className="text-5xl font-bold text-gray-800 mb-2 text-center">Learn and grow at <br /> your own pace </h1>
             </div>
 
             {/* Right Sign In Section */}
             <div className="w-full lg:w-1/2 flex flex-col items-center justify-center px-8">
                 <div className="w-full max-w-md items-center justify-center">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2 flex-col space-y-7 text-center">Create Your Trueminds <br/> Account </h1>
-                    <p className="text-gray-600 mb-8 text-center flex-col space-y-4 "> Plan, manage, and elevate every moment from first <br/> idea to final applause</p>
-                    
-                    <br/>
+                    <h1 className="text-2xl font-bold text-gray-800 mb-2 flex-col space-y-7 text-center">Create Your Trueminds <br /> Account </h1>
+                    <p className="text-gray-600 mb-8 text-center flex-col space-y-4 "> Plan, manage, and elevate every moment from first <br /> idea to final applause</p>
 
-                    
+                    <br />
+
+
 
                     {/* Email Input */}
                     <input
@@ -57,7 +56,7 @@ const Signin = () => {
 
                     {/* Google Sign In Button */}
                     <button
-                       
+
                         className="w-full bg-blue-500 hover:bg-blue-600 text-[#000000] font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200"
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
