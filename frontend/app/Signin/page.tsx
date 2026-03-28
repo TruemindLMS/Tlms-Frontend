@@ -1,18 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
-import Image1949 from '@/public/img/image1949.jpg';
 
 const Signin = () => {
     return (
         <div className="flex h-screen bg-white">
             {/* Left Image Section */}
             <div className="hidden lg:flex  flex-col space-y-12 w-1/2 bg-gray-100 items-center justify-center">
-                <Image
-                    src={Image1949}
+                <img
+                    src='./img/womans.png'
                     alt="Sign in"
                     width={500}
                     height={500}
-                    className="object-cover w-auto h-auto rounded-lg shadow-lg"
+                    className="object-cover w-auto h-auto rounded-lg"
                 />
                 <h1 className="text-5xl font-bold text-gray-800 mb-2 text-center">Learn and grow at <br /> your own pace </h1>
             </div>

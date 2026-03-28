@@ -9,7 +9,7 @@ const Topnav = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathname = usePathname();
 
-    const allowedRoutes = ['/', '/blog', '/about'];
+    const allowedRoutes = ['/', '/blog', '/about', '/contact'];
     if (!allowedRoutes.includes(pathname)) return null;
 
     const navLinks = [
@@ -24,6 +24,11 @@ const Topnav = () => {
         if (path !== '/' && pathname.startsWith(path)) return true;
         return false;
     };
+
+
+    if (pathname?.startsWith('/dash')) {
+        return null
+    }
 
     return (
         <nav className="bg-white shadow-sm sticky top-0 z-50">
