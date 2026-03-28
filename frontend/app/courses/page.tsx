@@ -105,7 +105,7 @@ export default function Home() {
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  
+
   // Enroll form states
   const [enrollName, setEnrollName] = useState('');
   const [enrollEmail, setEnrollEmail] = useState('');
@@ -177,7 +177,7 @@ export default function Home() {
       setFieldErrors({ email: true });
       return;
     }
-    
+
     if (selectedCourse) {
       setCourses(
         courses.map((course) =>
@@ -328,13 +328,13 @@ export default function Home() {
           animation: slideInUp 0.3s ease-out forwards;
         }
       `}</style>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-6 py-4 mb-6">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-indigo-500" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-800 bg-clip-text text-transparent">
+            <Sparkles className="w-6 h-6 text-primary-500" />
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
               Course Library
             </h1>
           </div>
@@ -399,22 +399,20 @@ export default function Home() {
               <div className="flex gap-1 bg-gray-100 rounded-xl p-1 shrink-0">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-all duration-300 ${
-                    viewMode === 'grid' 
-                      ? 'bg-white shadow-sm text-indigo-600' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
+                  className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'grid'
+                    ? 'bg-white shadow-sm text-indigo-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
                   aria-label="Grid view"
                 >
                   <Grid3x3 className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-all duration-300 ${
-                    viewMode === 'list' 
-                      ? 'bg-white shadow-sm text-indigo-600' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
+                  className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'list'
+                    ? 'bg-white shadow-sm text-indigo-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
                   aria-label="List view"
                 >
                   <List className="w-5 h-5" />
@@ -444,18 +442,16 @@ export default function Home() {
           </div>
         ) : (
           <div
-            className={`grid gap-6 ${
-              viewMode === 'grid'
-                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                : 'grid-cols-1'
-            }`}
+            className={`grid gap-6 ${viewMode === 'grid'
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+              : 'grid-cols-1'
+              }`}
           >
             {filteredCourses.map((course) => (
               <div
                 key={course.id}
-                className={`bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${
-                  viewMode === 'grid' ? 'card-hover-effect' : 'hover:shadow-md'
-                }`}
+                className={`bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${viewMode === 'grid' ? 'card-hover-effect' : 'hover:shadow-md'
+                  }`}
                 onClick={() => viewMode === 'grid' && handleEnroll(course)}
                 onMouseEnter={() => setHoveredCard(course.id)}
                 onMouseLeave={() => setHoveredCard(null)}
@@ -505,7 +501,7 @@ export default function Home() {
                             e.stopPropagation();
                             handleEnroll(course);
                           }}
-                          className="px-4 py-1.5 text-indigo-600 hover:text-indigo-700 font-semibold text-sm hover:bg-indigo-50 rounded-lg transition-all duration-300 flex items-center gap-1 group/btn"
+                          className="px-4 py-1.5 text-pimary-600 hover:text-primary-700 font-semibold text-sm hover:bg-primary-50 rounded-lg transition-all duration-300 flex items-center gap-1 group/btn"
                         >
                           Enroll
                           <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover/btn:translate-x-1" />
@@ -634,7 +630,7 @@ export default function Home() {
           </div>
         )}
 
-        
+
         {showToast && (
           <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium z-50 animate-slideInUp flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
