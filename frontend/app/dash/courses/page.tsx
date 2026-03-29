@@ -144,7 +144,7 @@ export default function CoursesPage() {
                         className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all group"
                     >
                         <div className="relative h-48 overflow-hidden">
-                            <div className="w-full h-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
+                            <div className="w-full h-full bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center">
                                 <BookOpen size={48} className="text-white opacity-50" />
                             </div>
                             <div className="absolute top-2 right-2">

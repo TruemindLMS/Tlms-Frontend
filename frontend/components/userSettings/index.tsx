@@ -56,7 +56,7 @@ const UserSettings = () => {
   //     //  }
 
   return (
-    <div className="flex flex-col gap-3 max-w-6xl w-10/12 mx-auto py-20 ">
+    <div className="flex flex-col gap-3 max-w-6xl ml-16 md:ml-20 mx-auto py-6 md:pb-10 ">
       <div className="flex flex-col gap-2 mb-4">
         <h1 className="text-2xl md:text-4xl font-bold ">Settings</h1>
         <p className=" text-sm md:text-base  mt-1">

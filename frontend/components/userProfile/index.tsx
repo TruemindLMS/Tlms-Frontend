@@ -9,11 +9,13 @@ import Link from "next/link";
 const UserProfile = () => {
   const [visible, setVisible] = useState(false);
   return (
-    <div className="flex flex-col gap-3 max-w-6xl w-10/12 mx-auto py-20">
-      <div className=" py-6 md:py-8 px-3 md:px-4 shadow-md shadow-gray-200 rounded-lg">
-        <p className="text-3xl md:text-4xl text-[#1C2A39] font-semibold">
-          Profile
-        </p>
+    <div className="flex flex-col gap-3 max-w-6xl ml-16 md:ml-20 mx-auto py-6 md:pb-10">
+      
+      <div className="mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          My Profile 📚
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">Here is your profile</p>
       </div>
       <div className="py-6 md:py-8 px-3 md:px-4 flex justify-between shadow-md shadow-gray-200 rounded-lg">
         <div>
@@ -42,7 +44,7 @@ const UserProfile = () => {
           className="relative"
           onMouseEnter={() => setVisible(!visible)}
           onMouseLeave={() => setVisible(false)}
-          href={"/settings"}
+          href={"/dash/settings"}
         >
           <Settings className="" />
           <span
@@ -58,16 +60,28 @@ const UserProfile = () => {
         </p>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 w-full mt-4 md:mt-8">
           <div className="flex flex-col items-center">
-            <p className=" text-2xl md:text-3xl font-semibold text-[#1C2A39]">3</p>
-            <p className=" text-xl md:text-[28px] font-normal text-[#9BA5A0] ">Enrolled</p>
+            <p className=" text-2xl md:text-3xl font-semibold text-[#1C2A39]">
+              3
+            </p>
+            <p className=" text-xl md:text-[28px] font-normal text-[#9BA5A0] ">
+              Enrolled
+            </p>
           </div>
           <div className="flex flex-col items-center">
-            <p className=" text-2xl md:text-3xl font-semibold text-[#1C2A39]">2</p>
-            <p className=" text-xl md:text-[28px] font-normal text-[#9BA5A0] ">Completed</p>
+            <p className=" text-2xl md:text-3xl font-semibold text-[#1C2A39]">
+              2
+            </p>
+            <p className=" text-xl md:text-[28px] font-normal text-[#9BA5A0] ">
+              Completed
+            </p>
           </div>
           <div className="flex flex-col items-center">
-            <p className=" text-2xl md:text-3xl font-semibold text-[#1C2A39]">75%</p>
-            <p className=" text-xl md:text-[28px] font-normal text-[#9BA5A0] ">Progress</p>
+            <p className=" text-2xl md:text-3xl font-semibold text-[#1C2A39]">
+              75%
+            </p>
+            <p className=" text-xl md:text-[28px] font-normal text-[#9BA5A0] ">
+              Progress
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-3 mt-4 md:mt-8">
@@ -76,7 +90,9 @@ const UserProfile = () => {
         </div>
       </div>
       <div className="py-8 px-4 shadow-md shadow-gray-200 rounded-lg">
-        <p className="text-2xl md:text-3xl font-semibold text-[#1C2A39]">Achievements</p>
+        <p className="text-2xl md:text-3xl font-semibold text-[#1C2A39]">
+          Achievements
+        </p>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 w-full mt-4 md:mt-8">
           <div className="h-75 rounded-lg flex flex-col gap-12 justify-center items-center shadow-gray-200 shadow-md bg-[#CFE0D7]">
             <Image
