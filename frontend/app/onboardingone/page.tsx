@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { useState } from "react";
@@ -64,9 +64,7 @@ export default function Onboardingone() {
                             <p className="text-sm text-gray-600">
                                 Help us understand your context to suggest relevant courses.
                             </p>
-                            <span className="text-xs text-gray-400">
-                                {bio.length}/250
-                            </span>
+                            <span className="text-xs text-gray-400">{bio.length}/250</span>
                         </div>
                     </div>
                 </div>
@@ -74,7 +72,6 @@ export default function Onboardingone() {
 
             {/* Bottom Navigation */}
             <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-white mt-15">
-
                 <button className="font-semibold text-sm text-gray-500 hover:text-gray-700">
                     Skip for now
                 </button>
