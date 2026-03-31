@@ -1,11 +1,36 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, XCircle, Loader2, ArrowRight, Mail } from 'lucide-react'
 
+// Main component wrapped with Suspense
 export default function VerifyOTPPage() {
+    return (
+        <Suspense fallback={<OTPLoadingFallback />}>
+            <VerifyOTPContent />
+        </Suspense>
+    )
+}
+
+// Loading fallback component
+function OTPLoadingFallback() {
+    return (
+        <div className="min-h-screen flex bg-[#004222] items-center justify-center p-4">
+            <div className="max-w-md w-full">
+                <div className="bg-white rounded-3xl shadow-2xl p-8 text-center">
+                    <Loader2 size={40} className="text-primary-600 animate-spin mx-auto mb-4" />
+                    <h2 className="text-xl font-semibold text-gray-900">Loading...</h2>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+// Main content component that uses useSearchParams
+function VerifyOTPContent() {
     const searchParams = useSearchParams()
     const router = useRouter()
     const email = searchParams.get('email')
@@ -263,7 +288,7 @@ export default function VerifyOTPPage() {
                             </p>
                         )}
                         {/* Demo hint */}
-                        <p className="text-xs hidden text-gray-400 text-center mt-3">
+                        <p className="text-xs text-gray-400 text-center mt-3">
                             Demo code: <span className="font-mono font-semibold">654321</span>
                         </p>
                     </div>
