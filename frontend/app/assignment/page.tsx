@@ -9,9 +9,9 @@ export default function Assignmentpage() {
   const [statusFilter, setStatusFilter] = useState<string>("All");
 
   const filteredAssignments =
-  statusFilter === "All"
-    ? Assignment
-    : Assignment.filter((card) => card.status === statusFilter);
+    statusFilter === "All"
+      ? Assignment
+      : Assignment.filter((card) => card.status === statusFilter);
 
   return (
     <section className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-gray-50 ">
@@ -49,9 +49,9 @@ export default function Assignmentpage() {
               "Submitted",
             ].map((item, index) => (
               <button
-              key={index}
-              onClick={() => setStatusFilter(item)}
-                className={` flex-1 px-2 py-3 border border-gray-300 rounded-xl hover:shadow-md cursor-pointer transition ${ statusFilter === item ? "bg-primary-500 text-white border-primary-500" : "border-gray-300 hover:shadow-md" }`}
+                key={index}
+                onClick={() => setStatusFilter(item)}
+                className={` flex-1 px-2 py-3 border border-gray-300 rounded-xl hover:shadow-md cursor-pointer transition ${statusFilter === item ? "bg-primary-500 text-white border-primary-500" : "border-gray-300 hover:shadow-md"}`}
               >
                 {item}
               </button>
@@ -96,7 +96,7 @@ export default function Assignmentpage() {
                         <div className="flex items-center">
                           <p className={`mr-2 text-2xl ${card.color}`}>•</p>
                           <p className="text-md text-gray-500">
-                           { status === "Overdue"  ? "Due" : status === "Submitted" ? "Submitted" : status === "Pending" && "Pending since" } {card.dueDate}
+                            {status === "Overdue" ? "Due" : status === "Submitted" ? "Submitted" : status === "Pending" && "Pending since"} {card.dueDate}
                           </p>
                         </div>
 
