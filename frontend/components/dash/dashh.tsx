@@ -1,71 +1,93 @@
 "use client";
-import { useState, ReactNode, useEffect } from "react";
-import Image from "next/image";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
-  Home,
-  CheckSquare,
-  Users,
-  BarChart2,
-  Award,
-  Settings,
-  HelpCircle,
-  LogOut,
-  Bell,
-  Mail,
-  Image as ImageIcon,
   CheckCircle,
   Trophy,
   Star,
   Target,
   BookOpen,
   Clock,
-  ArrowBigLeftDash,
   Play,
-  EllipsisVertical,
-  CirclePlus,
   Calendar,
-  TrendingUp,
-  User,
-  GraduationCap,
-  FileText,
   ChevronRight,
-  Activity,
   Sparkles,
+  Award,
+  Users,
 } from "lucide-react";
+import { isAuthenticated, getUser, logoutUser } from "@/lib/api";
 
 export default function DashboardPage() {
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const [hasStartedCourse, setHasStartedCourse] = useState(false);
   const [userName, setUserName] = useState("Favour");
+  const [loading, setLoading] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Check if user has started any course (from localStorage or API)
+  // Check authentication and load user data
   useEffect(() => {
+    // Check if user is authenticated
+    if (!isAuthenticated()) {
+      router.push('/signin');
+      return;
+    }
+
+    // Load user data
+    const user = getUser();
+    if (user) {
+      setUserName(user.firstName || user.email?.split('@')[0] || "Favour");
+    }
+
+    // Check if user has started any course
     const started = localStorage.getItem("hasStartedCourse");
     if (started === "true") {
       setHasStartedCourse(true);
     }
-  }, []);
+
+    setLoading(false);
+  }, [router]);
 
   const handleStartCourse = () => {
     setHasStartedCourse(true);
     localStorage.setItem("hasStartedCourse", "true");
   };
 
+  const handleLogout = async () => {
+    await logoutUser();
+    router.push('/signin');
+  };
+
+  const handleSidebarCollapse = (collapsed: boolean) => {
+    setSidebarCollapsed(collapsed);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen bg-white text-sm overflow-x-hidden">
+    <div className="min-h-screen bg-white">
 
-
-      {/* MAIN CONTENT */}
-      <div className="flex-1 ml-20 md:ml-0">
-
-        {/* CONDITIONAL RENDERING */}
-        {!hasStartedCourse ? (
-          // FIRST TIME USER VIEW - Welcome Dashboard
-          <FirstTimeDashboard onStartCourse={handleStartCourse} userName={userName} />
-        ) : (
-          // ACTIVE USER VIEW - Full Dashboard with Progress
-          <ActiveDashboard userName={userName} />
-        )}
+      {/* MAIN CONTENT - Adjusted margin based on sidebar state */}
+      <div className={`transition-all duration-300 ${sidebarCollapsed ? 'md:ml-10' : 'md:ml-10'
+        }`}>
+        <div className="pt-5">
+          {/* CONDITIONAL RENDERING */}
+          {!hasStartedCourse ? (
+            <FirstTimeDashboard onStartCourse={handleStartCourse} userName={userName} />
+          ) : (
+            <ActiveDashboard userName={userName} />
+          )}
+        </div>
       </div>
     </div>
   );
@@ -74,9 +96,9 @@ export default function DashboardPage() {
 // FIRST TIME USER DASHBOARD
 function FirstTimeDashboard({ onStartCourse, userName }: { onStartCourse: () => void; userName: string }) {
   const courses = [
-    { title: "UI/UX Design", progress: "2/8 Watched", icon: "🎨" },
-    { title: "Product Management", progress: "0/6 Watched", icon: "📊" },
-    { title: "Graphic Design", progress: "1/10 Watched", icon: "✏️" },
+    { title: "UI/UX Design", progress: "2/8 Watched", icon: "🎨", lessons: 8, completed: 2 },
+    { title: "Product Management", progress: "0/6 Watched", icon: "📊", lessons: 6, completed: 0 },
+    { title: "Graphic Design", progress: "1/10 Watched", icon: "✏️", lessons: 10, completed: 1 },
   ];
 
   return (
@@ -96,12 +118,13 @@ function FirstTimeDashboard({ onStartCourse, userName }: { onStartCourse: () => 
           </button>
         </div>
 
-        {/* Decorative Stars */}
-        <Star className="absolute top-6 right-6 opacity-30" size={24} />
-        <Star className="absolute bottom-6 right-6 opacity-30" size={24} />
-        <Star className="absolute top-6 right-14 opacity-30" size={20} />
-        <Star className="absolute bottom-6 right-14 opacity-30" size={20} />
-        <Sparkles className="absolute top-1/2 right-10 opacity-30" size={20} />
+        {/* Decorative Elements */}
+        <div className="absolute top-6 right-6 opacity-30">
+          <Sparkles size={24} />
+        </div>
+        <div className="absolute bottom-6 right-6 opacity-30">
+          <Sparkles size={20} />
+        </div>
       </div>
 
       {/* Featured Courses */}
@@ -114,7 +137,14 @@ function FirstTimeDashboard({ onStartCourse, userName }: { onStartCourse: () => 
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {courses.map((course, index) => (
-            <CourseCard key={index} title={course.title} progress={course.progress} icon={course.icon} onStart={onStartCourse} />
+            <CourseCard
+              key={index}
+              title={course.title}
+              completed={course.completed}
+              total={course.lessons}
+              icon={course.icon}
+              onStart={onStartCourse}
+            />
           ))}
         </div>
       </div>
@@ -302,16 +332,9 @@ function ActiveDashboard({ userName }: { userName: string }) {
 }
 
 // COMPONENTS
-function SidebarItem({ icon, label, show, active, danger }: { icon: ReactNode; label: string; show: boolean; active?: boolean; danger?: boolean }) {
-  return (
-    <div className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50 ${active ? "text-green-700 font-medium bg-green-50" : danger ? "text-red-500" : "text-gray-600"}`}>
-      {icon}
-      {show && <span>{label}</span>}
-    </div>
-  );
-}
+function CourseCard({ title, completed, total, icon, onStart }: { title: string; completed: number; total: number; icon: string; onStart: () => void }) {
+  const percentage = (completed / total) * 100;
 
-function CourseCard({ title, progress, icon, onStart }: { title: string; progress: string; icon: string; onStart: () => void }) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all">
       <div className="flex items-center justify-between mb-3">
@@ -321,9 +344,9 @@ function CourseCard({ title, progress, icon, onStart }: { title: string; progres
         </button>
       </div>
       <h4 className="font-medium mb-1">{title}</h4>
-      <p className="text-xs text-gray-400">{progress}</p>
+      <p className="text-xs text-gray-400">{completed}/{total} Watched</p>
       <div className="mt-3 h-1 bg-gray-100 rounded-full overflow-hidden">
-        <div className="h-full bg-green-600 rounded-full" style={{ width: `${parseInt(progress) / 8 * 100}%` }}></div>
+        <div className="h-full bg-green-600 rounded-full" style={{ width: `${percentage}%` }}></div>
       </div>
     </div>
   );

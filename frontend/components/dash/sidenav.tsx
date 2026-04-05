@@ -31,13 +31,13 @@ interface SidebarProps {
 const navigation: NavItem[] = [
     // GENERAL section
     { name: 'Dashboard', href: '/dash', icon: LayoutDashboard, section: 'general' },
-    { name: 'Courses', href: '/dash/courses', icon: BookOpen, section: 'general' },
-    { name: 'Task', href: '/dash/task', icon: Award, section: 'general' },
-    { name: 'Team', href: '/dash/team', icon: Users, section: 'general' },
-    { name: 'Progress', href: '/dash/progress', icon: TrendingUp, section: 'general' },
-    { name: 'My Certificates', href: '/dash/certificate', icon: Award, section: 'general' },
+    { name: 'Courses', href: '/dashboard/courses', icon: BookOpen, section: 'general' },
+    { name: 'Task', href: '/dashboard/task', icon: Award, section: 'general' },
+    { name: 'Team', href: '/dashboard/team', icon: Users, section: 'general' },
+    { name: 'Progress', href: '/dashboard/progress', icon: TrendingUp, section: 'general' },
+    { name: 'My Certificates', href: '/dashboard/certificate', icon: Award, section: 'general' },
     // TOOLS section
-    { name: 'Account & Settings', href: '/dash/userprofile', icon: Settings, section: 'tools' },
+    { name: 'Account & Settings', href: '/dashboard/userprofile', icon: Settings, section: 'tools' },
 ]
 
 export default function Sidebar({ onCollapse }: SidebarProps) {

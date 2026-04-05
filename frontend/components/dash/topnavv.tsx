@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Search, Globe, ChevronDown, Bell, Menu, X, User, Target, BookOpen, Clock, CheckCircle, Trophy, Star, CirclePlus, LogOut, Settings } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getUser, getUserFullName, getUserEmail } from '@/lib/api'
 
 interface TopnavvProps {
     onMenuClick?: () => void
@@ -46,6 +47,10 @@ export default function Topnavv({ onMenuClick, sidebarCollapsed = false }: Topna
     const [isClosing, setIsClosing] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [isMobile, setIsMobile] = useState(false)
+    const [userName, setUserName] = useState('')
+    const [userFullName, setUserFullName] = useState('')
+    const [userEmail, setUserEmail] = useState('')
+    const [greeting, setGreeting] = useState('Good Morning')
 
     // Check if mobile view
     useEffect(() => {
@@ -55,6 +60,32 @@ export default function Topnavv({ onMenuClick, sidebarCollapsed = false }: Topna
         checkMobile()
         window.addEventListener('resize', checkMobile)
         return () => window.removeEventListener('resize', checkMobile)
+    }, [])
+
+    // Load user data and set greeting
+    useEffect(() => {
+        const user = getUser()
+        const fullName = getUserFullName()
+        const email = getUserEmail()
+
+        if (user) {
+            setUserName(user.firstName || user.email?.split('@')[0] || 'User')
+            setUserFullName(fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim())
+            setUserEmail(email || user.email || '')
+        } else {
+            // Fallback to localStorage directly if getUser fails
+            const storedName = localStorage.getItem('userFullName')
+            const storedEmail = localStorage.getItem('userEmail')
+            if (storedName) setUserFullName(storedName)
+            if (storedEmail) setUserEmail(storedEmail)
+            setUserName(storedName?.split(' ')[0] || 'User')
+        }
+
+        // Set greeting based on time of day
+        const hour = new Date().getHours()
+        if (hour < 12) setGreeting('Good Morning')
+        else if (hour < 17) setGreeting('Good Afternoon')
+        else setGreeting('Good Evening')
     }, [])
 
     const languages = [
@@ -92,6 +123,9 @@ export default function Topnavv({ onMenuClick, sidebarCollapsed = false }: Topna
         localStorage.removeItem('userFullName')
         localStorage.removeItem('userEmail')
         localStorage.removeItem('userRole')
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('user')
         window.location.href = '/signin'
     }
 
@@ -191,16 +225,16 @@ export default function Topnavv({ onMenuClick, sidebarCollapsed = false }: Topna
                     </div>
                 </div>
             </nav>
+
             {isProfileOpen && (
                 <>
-
                     <div
                         className={`fixed inset-0 bg-black/50 z-40 ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`}
                         onClick={handleCloseProfile}
                     />
 
                     {/* Profile Panel with slide animation */}
-                    <aside className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50  overflow-y-auto ${isClosing ? 'animate-slide-out' : 'animate-slide-in'}`}>
+                    <aside className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 overflow-y-auto ${isClosing ? 'animate-slide-out' : 'animate-slide-in'}`}>
                         <div className="p-6">
                             {/* Close Button */}
                             <button
@@ -210,7 +244,7 @@ export default function Topnavv({ onMenuClick, sidebarCollapsed = false }: Topna
                                 <X size={20} className="text-gray-500" />
                             </button>
 
-                            {/* Profile Header */}
+                            {/* Profile Header - Updated with dynamic user name */}
                             <div className="flex flex-col items-center text-center mb-6">
                                 <div className="relative">
                                     <Image
@@ -224,8 +258,12 @@ export default function Topnavv({ onMenuClick, sidebarCollapsed = false }: Topna
                                         <ChevronDown size={14} />
                                     </button>
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 mt-3">Good Morning Bankole</h3>
-                                <p className="text-sm text-gray-500 mb-4">Start your journey, achieve your target</p>
+                                <h3 className="text-xl font-bold text-gray-900 mt-3">
+                                    {greeting}, {userName}! 👋
+                                </h3>
+                                <p className="text-sm text-gray-500 mb-4">
+                                    {userEmail || 'Start your journey, achieve your target'}
+                                </p>
 
                                 {/* Quick Action Icons */}
                                 <div className="flex gap-3">

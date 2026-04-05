@@ -254,11 +254,11 @@ export default function OnboardingFlow() {
             });
 
             // Redirect to dashboard
-            router.push('/dash');
+            router.push('/dashboard');
         } catch (error) {
             console.error('Onboarding completion error:', error);
             // Still redirect even if API fails
-            router.push('/dash');
+            router.push('/dashboard');
         } finally {
             setLoading(false);
         }

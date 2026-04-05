@@ -1,6 +1,9 @@
 // lib/api.ts
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api'
 
+// Enable mock mode for testing when backend is unavailable
+const USE_MOCK = true // Set to false when backend is ready
+
 // Helper to safely parse JSON responses
 async function parseResponse(response: Response) {
     const text = await response.text()
@@ -46,7 +49,74 @@ export interface ApiResponse {
     user?: any
 }
 
+// Mock user database for testing
+const mockUsers = new Map()
+
+// Initialize with a test user
+mockUsers.set('test@example.com', {
+    id: '1',
+    email: 'test@example.com',
+    password: 'Test123!',
+    firstName: 'Test',
+    lastName: 'User',
+    role: 'individual'
+})
+
+// Mock profile data
+const mockProfile = {
+    id: '1',
+    firstName: 'Bankole',
+    lastName: 'Shittu',
+    email: 'bankole@talentflow.com',
+    role: 'UI/UX Designer',
+    jobTitle: 'UI/UX Intern',
+    bio: 'Passionate UI/UX designer with 3 years of experience',
+    enrolledCourses: [],
+    completedCourses: [],
+    overallProgress: 65,
+    profilePicture: null
+}
+
 export async function loginUser(email: string, password: string): Promise<LoginResponse> {
+    // Mock mode for testing when backend is unavailable
+    if (USE_MOCK) {
+        console.log('🔐 Mock login for:', email)
+
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
+        const user = mockUsers.get(email)
+
+        if (!user || user.password !== password) {
+            throw new Error('Invalid email or password')
+        }
+
+        const mockResponse: LoginResponse = {
+            token: 'mock-jwt-token-12345',
+            refreshToken: 'mock-refresh-token-67890',
+            user: {
+                id: user.id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                role: user.role
+            },
+            message: 'Login successful'
+        }
+
+        // Store in localStorage/sessionStorage
+        localStorage.setItem('authToken', mockResponse.token)
+        localStorage.setItem('refreshToken', mockResponse.refreshToken)
+        localStorage.setItem('user', JSON.stringify(mockResponse.user))
+        localStorage.setItem('isAuthenticated', 'true')
+        localStorage.setItem('userFullName', `${user.firstName} ${user.lastName}`)
+        localStorage.setItem('userEmail', user.email)
+        localStorage.setItem('userRole', user.role)
+
+        return mockResponse
+    }
+
+    // Real API call
     try {
         const response = await fetch(`${API_BASE_URL}/Auth/login`, {
             method: 'POST',
@@ -70,6 +140,9 @@ export async function loginUser(email: string, password: string): Promise<LoginR
             }
             if (data.user) {
                 localStorage.setItem('user', JSON.stringify(data.user))
+                localStorage.setItem('userFullName', `${data.user.firstName || ''} ${data.user.lastName || ''}`.trim())
+                localStorage.setItem('userEmail', data.user.email)
+                localStorage.setItem('userRole', data.user.role)
             }
         }
 
@@ -81,6 +154,43 @@ export async function loginUser(email: string, password: string): Promise<LoginR
 }
 
 export async function registerUser(userData: RegisterRequest): Promise<ApiResponse> {
+    // Mock mode for testing
+    if (USE_MOCK) {
+        console.log('📝 Mock registration for:', userData.email)
+
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
+        // Check if user already exists
+        if (mockUsers.has(userData.email)) {
+            throw new Error('User with this email already exists')
+        }
+
+        // Create new user
+        const newUser = {
+            id: String(mockUsers.size + 1),
+            email: userData.email,
+            password: userData.password,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            role: userData.role
+        }
+
+        mockUsers.set(userData.email, newUser)
+
+        // Store pending user data for OTP verification
+        localStorage.setItem('pendingUserData', JSON.stringify({
+            fullName: `${userData.firstName} ${userData.lastName}`,
+            email: userData.email,
+            role: userData.role
+        }))
+
+        return {
+            success: true,
+            message: 'Registration successful. Please verify your email.'
+        }
+    }
+
+    // Real API call
     try {
         const response = await fetch(`${API_BASE_URL}/Auth/register`, {
             method: 'POST',
@@ -108,6 +218,21 @@ export async function registerUser(userData: RegisterRequest): Promise<ApiRespon
 }
 
 export async function sendOtp(email: string): Promise<ApiResponse> {
+    // Mock mode
+    if (USE_MOCK) {
+        console.log('📧 Mock OTP sent to:', email)
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        // Store mock OTP in localStorage
+        localStorage.setItem('mockOtp', '123456')
+        localStorage.setItem('otpEmail', email)
+
+        return {
+            success: true,
+            message: 'OTP sent successfully. Use code: 123456'
+        }
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/Auth/resend-otp`, {
             method: 'POST',
@@ -131,6 +256,46 @@ export async function sendOtp(email: string): Promise<ApiResponse> {
 }
 
 export async function verifyOtp(email: string, otp: string): Promise<ApiResponse> {
+    // Mock mode
+    if (USE_MOCK) {
+        console.log('🔐 Verifying OTP for:', email)
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        // Accept 123456 or any 6-digit code in mock mode
+        if (otp === '123456' || (otp.length === 6 && /^\d+$/.test(otp))) {
+            const user = mockUsers.get(email)
+            const mockResponse = {
+                success: true,
+                token: 'mock-jwt-token-12345',
+                refreshToken: 'mock-refresh-token-67890',
+                user: user || {
+                    id: '1',
+                    email: email,
+                    firstName: email.split('@')[0],
+                    lastName: 'User',
+                    role: 'individual'
+                },
+                message: 'OTP verified successfully'
+            }
+
+            localStorage.setItem('authToken', mockResponse.token)
+            localStorage.setItem('refreshToken', mockResponse.refreshToken)
+            localStorage.setItem('user', JSON.stringify(mockResponse.user))
+            localStorage.setItem('isAuthenticated', 'true')
+            localStorage.setItem('userFullName', `${mockResponse.user.firstName} ${mockResponse.user.lastName}`.trim())
+            localStorage.setItem('userEmail', mockResponse.user.email)
+            localStorage.setItem('userRole', mockResponse.user.role)
+
+            // Clear mock OTP
+            localStorage.removeItem('mockOtp')
+            localStorage.removeItem('otpEmail')
+
+            return mockResponse
+        } else {
+            throw new Error('Invalid OTP. Please enter a valid 6-digit code.')
+        }
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/Auth/verify-otp`, {
             method: 'POST',
@@ -154,6 +319,9 @@ export async function verifyOtp(email: string, otp: string): Promise<ApiResponse
             }
             if (data.user) {
                 localStorage.setItem('user', JSON.stringify(data.user))
+                localStorage.setItem('userFullName', `${data.user.firstName || ''} ${data.user.lastName || ''}`.trim())
+                localStorage.setItem('userEmail', data.user.email)
+                localStorage.setItem('userRole', data.user.role)
             }
             localStorage.setItem('isAuthenticated', 'true')
         }
@@ -166,6 +334,16 @@ export async function verifyOtp(email: string, otp: string): Promise<ApiResponse
 }
 
 export async function forgotPassword(email: string): Promise<ApiResponse> {
+    // Mock mode
+    if (USE_MOCK) {
+        console.log('🔑 Mock password reset for:', email)
+        await new Promise(resolve => setTimeout(resolve, 500))
+        return {
+            success: true,
+            message: 'Password reset link sent to your email'
+        }
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/Auth/forgot-password`, {
             method: 'POST',
@@ -189,6 +367,16 @@ export async function forgotPassword(email: string): Promise<ApiResponse> {
 }
 
 export async function resetPassword(token: string, newPassword: string): Promise<ApiResponse> {
+    // Mock mode
+    if (USE_MOCK) {
+        console.log('🔑 Mock password reset with token:', token)
+        await new Promise(resolve => setTimeout(resolve, 500))
+        return {
+            success: true,
+            message: 'Password reset successfully'
+        }
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/Auth/reset-password`, {
             method: 'POST',
@@ -214,7 +402,7 @@ export async function resetPassword(token: string, newPassword: string): Promise
 export async function logoutUser(): Promise<void> {
     try {
         const token = getAuthToken()
-        if (token) {
+        if (token && !USE_MOCK) {
             await fetch(`${API_BASE_URL}/Auth/logout`, {
                 method: 'POST',
                 headers: {
@@ -232,6 +420,7 @@ export async function logoutUser(): Promise<void> {
 
 // Helper function to get auth token
 export function getAuthToken(): string | null {
+    if (typeof window === 'undefined') return null
     let token = sessionStorage.getItem('authToken')
     if (!token) {
         token = localStorage.getItem('authToken')
@@ -241,6 +430,7 @@ export function getAuthToken(): string | null {
 
 // Helper function to get refresh token
 export function getRefreshToken(): string | null {
+    if (typeof window === 'undefined') return null
     let token = sessionStorage.getItem('refreshToken')
     if (!token) {
         token = localStorage.getItem('refreshToken')
@@ -250,6 +440,7 @@ export function getRefreshToken(): string | null {
 
 // Helper function to logout
 export function logout(): void {
+    if (typeof window === 'undefined') return
     localStorage.removeItem('authToken')
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('user')
@@ -259,6 +450,8 @@ export function logout(): void {
     localStorage.removeItem('userEmail')
     localStorage.removeItem('userRole')
     localStorage.removeItem('onboardingCompleted')
+    localStorage.removeItem('mockOtp')
+    localStorage.removeItem('otpEmail')
     sessionStorage.removeItem('authToken')
     sessionStorage.removeItem('refreshToken')
     sessionStorage.removeItem('user')
@@ -267,6 +460,7 @@ export function logout(): void {
 
 // Helper function to check if user is authenticated
 export function isAuthenticated(): boolean {
+    if (typeof window === 'undefined') return false
     const token = getAuthToken()
     const isAuth = localStorage.getItem('isAuthenticated') === 'true'
     return !!token && isAuth
@@ -274,6 +468,7 @@ export function isAuthenticated(): boolean {
 
 // Helper function to get user from storage
 export function getUser(): any {
+    if (typeof window === 'undefined') return null
     const userStr = localStorage.getItem('user')
     if (userStr) {
         try {
@@ -287,6 +482,7 @@ export function getUser(): any {
 
 // Helper function to set user data
 export function setUser(user: any): void {
+    if (typeof window === 'undefined') return
     localStorage.setItem('user', JSON.stringify(user))
 }
 
@@ -357,25 +553,88 @@ export const courseApi = {
     delete: (id: string) => apiClient(`/Courses/${id}`, { method: 'DELETE' }),
 }
 
-// Profile API endpoints
+// Profile API endpoints with mock fallback
 export const profileApi = {
-    get: () => apiClient('/Profile'),
-    update: (profileData: any) => apiClient('/Profile', { method: 'PUT', body: JSON.stringify(profileData) }),
+    get: async () => {
+        if (USE_MOCK) {
+            console.log('👤 Mock: Getting profile data')
+            await new Promise(resolve => setTimeout(resolve, 500))
+
+            // Get user data from localStorage
+            const user = getUser()
+            if (user) {
+                return {
+                    ...mockProfile,
+                    firstName: user.firstName || mockProfile.firstName,
+                    lastName: user.lastName || mockProfile.lastName,
+                    email: user.email || mockProfile.email,
+                    role: user.role || mockProfile.role
+                }
+            }
+            return mockProfile
+        }
+
+        try {
+            return await apiClient('/Profile')
+        } catch (error: any) {
+            console.error('Profile API error:', error)
+            // Return mock data as fallback
+            return mockProfile
+        }
+    },
+    update: async (profileData: any) => {
+        if (USE_MOCK) {
+            console.log('✏️ Mock: Updating profile:', profileData)
+            await new Promise(resolve => setTimeout(resolve, 500))
+            return { success: true, message: 'Profile updated successfully', data: profileData }
+        }
+        return apiClient('/Profile', { method: 'PUT', body: JSON.stringify(profileData) })
+    },
 }
 
-// Complete Onboarding API endpoints
+// Complete Onboarding API endpoints with mock support
 export const onboardingApi = {
-    // Get current onboarding status
-    getStatus: () => apiClient('/Onboarding/status'),
+    getStatus: async () => {
+        if (USE_MOCK) {
+            console.log('📋 Mock: Getting onboarding status')
+            await new Promise(resolve => setTimeout(resolve, 500))
+            return {
+                success: true,
+                status: 'pending',
+                steps: {
+                    bio: false,
+                    profilePicture: false,
+                    role: false,
+                    goals: false
+                }
+            }
+        }
+        return apiClient('/Onboarding/status')
+    },
 
-    // Submit bio during onboarding
-    submitBio: (bioData: { bio: string }) => apiClient('/Onboarding/bio', {
-        method: 'POST',
-        body: JSON.stringify(bioData)
-    }),
+    submitBio: async (bioData: { bio: string }) => {
+        if (USE_MOCK) {
+            console.log('📝 Mock: Submitting bio:', bioData)
+            await new Promise(resolve => setTimeout(resolve, 500))
+            return { success: true, message: 'Bio submitted successfully' }
+        }
+        return apiClient('/Onboarding/bio', {
+            method: 'POST',
+            body: JSON.stringify(bioData)
+        })
+    },
 
-    // Upload profile picture
     uploadProfilePicture: async (file: File) => {
+        if (USE_MOCK) {
+            console.log('🖼️ Mock: Uploading profile picture:', file.name)
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            return {
+                success: true,
+                message: 'Profile picture uploaded successfully',
+                url: '/mock-profile-picture.jpg'
+            }
+        }
+
         const formData = new FormData()
         formData.append('file', file)
 
@@ -394,27 +653,67 @@ export const onboardingApi = {
         return parseResponse(response)
     },
 
-    // Submit role preference
-    submitRole: (roleData: { role: string }) => apiClient('/Onboarding/role', {
-        method: 'POST',
-        body: JSON.stringify(roleData)
-    }),
+    submitRole: async (roleData: { role: string }) => {
+        if (USE_MOCK) {
+            console.log('💼 Mock: Submitting role:', roleData)
+            await new Promise(resolve => setTimeout(resolve, 500))
+            return { success: true, message: 'Role submitted successfully' }
+        }
+        return apiClient('/Onboarding/role', {
+            method: 'POST',
+            body: JSON.stringify(roleData)
+        })
+    },
 
-    // Submit goals
-    submitGoals: (goalsData: { goals: string[] }) => apiClient('/Onboarding/goals', {
-        method: 'POST',
-        body: JSON.stringify(goalsData)
-    }),
+    submitGoals: async (goalsData: { goals: string[] }) => {
+        if (USE_MOCK) {
+            console.log('🎯 Mock: Submitting goals:', goalsData)
+            await new Promise(resolve => setTimeout(resolve, 500))
+            return { success: true, message: 'Goals submitted successfully' }
+        }
+        return apiClient('/Onboarding/goals', {
+            method: 'POST',
+            body: JSON.stringify(goalsData)
+        })
+    },
 
-    // Complete onboarding
-    completeOnboarding: () => apiClient('/Onboarding/complete', {
-        method: 'POST'
-    }),
+    completeOnboarding: async () => {
+        if (USE_MOCK) {
+            console.log('✅ Mock: Completing onboarding')
+            await new Promise(resolve => setTimeout(resolve, 500))
 
-    // Skip onboarding
-    skipOnboarding: () => apiClient('/Onboarding/skip', {
-        method: 'POST'
-    }),
+            // Mark onboarding as completed in localStorage
+            localStorage.setItem('onboardingCompleted', 'true')
+
+            return {
+                success: true,
+                message: 'Onboarding completed successfully',
+                redirectUrl: '/dashboard'
+            }
+        }
+        return apiClient('/Onboarding/complete', {
+            method: 'POST'
+        })
+    },
+
+    skipOnboarding: async () => {
+        if (USE_MOCK) {
+            console.log('⏭️ Mock: Skipping onboarding')
+            await new Promise(resolve => setTimeout(resolve, 500))
+
+            // Mark onboarding as skipped in localStorage
+            localStorage.setItem('onboardingCompleted', 'skipped')
+
+            return {
+                success: true,
+                message: 'Onboarding skipped successfully',
+                redirectUrl: '/dashboard'
+            }
+        }
+        return apiClient('/Onboarding/skip', {
+            method: 'POST'
+        })
+    },
 }
 
 // Team API endpoints
@@ -430,6 +729,8 @@ export const teamApi = {
 
 // Test backend connection
 export async function testBackendConnection(): Promise<boolean> {
+    if (USE_MOCK) return true
+
     try {
         const response = await fetch(`${API_BASE_URL.replace('/api', '')}/swagger/index.html`, {
             method: 'HEAD',
