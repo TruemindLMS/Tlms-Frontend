@@ -9,29 +9,33 @@ import Verification from "./components/verification";
 export interface UserProps {
   FirstName: string;
   lastName: string;
-  // username: string;
+  username: string;
   role: string;
   email: string;
   birthday: string;
   phone: string;
   address: string;
   location: string;
-  // country: string;
-  // cityState: string;
+  country: string;
+  cityState: string;
   postalCode: string;
-  // taxId: string;
-  // twoFactor: boolean;
-  // loginAlert: boolean;
+  taxId: string;
+  twoFactor: boolean;
+  loginAlert: boolean;
   avatarInitials: string;
 }
 
 const UserSettings = () => {
-  const USER = {
-    name: "Eldora Starling",
+  const USER: UserProps = {
+    FirstName: "Eldora",
+    lastName: "Starling",
     username: "eldora.s",
+    role: "User",
     email: "eldora.starling@mail.com",
     birthday: "2007-06-05",
     phone: "+1 (555) 748-2296",
+    address: "123 Main St",
+    location: "California, USA",
     country: "United States of America",
     cityState: "California, USA",
     postalCode: "ERT 52312",
