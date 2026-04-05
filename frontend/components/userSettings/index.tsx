@@ -7,6 +7,7 @@ import Security from "./components/security";
 import Verification from "./components/verification";
 
 export interface UserProps {
+  name: string;
   FirstName: string;
   lastName: string;
   username: string;
@@ -27,6 +28,7 @@ export interface UserProps {
 
 const UserSettings = () => {
   const USER: UserProps = {
+    name: "Eldora Starling",
     FirstName: "Eldora",
     lastName: "Starling",
     username: "eldora.s",
@@ -71,11 +73,11 @@ const UserSettings = () => {
           Manage your profile, address and security
         </p>
       </div>
-      {/* <AvatarUpload user={USER} /> */}
-      {/* <PersonalInfoForm user={USER} /> */}
-      {/* <Address user={USER} /> */}
-      {/* <Verification /> */}
-      {/* <Security /> */}
+      <AvatarUpload user={USER} />
+      <PersonalInfoForm user={USER} />
+      <Address user={USER} />
+      <Verification />
+      <Security />
     </div>
   );
 };
