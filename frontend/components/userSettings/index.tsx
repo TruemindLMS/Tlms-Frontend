@@ -8,10 +8,15 @@ import Verification from "./components/verification";
 
 export interface UserProps {
   name: string;
+  FirstName: string;
+  lastName: string;
   username: string;
+  role: string;
   email: string;
   birthday: string;
   phone: string;
+  address: string;
+  location: string;
   country: string;
   cityState: string;
   postalCode: string;
@@ -22,12 +27,17 @@ export interface UserProps {
 }
 
 const UserSettings = () => {
-  const USER = {
+  const USER: UserProps = {
     name: "Eldora Starling",
+    FirstName: "Eldora",
+    lastName: "Starling",
     username: "eldora.s",
+    role: "User",
     email: "eldora.starling@mail.com",
     birthday: "2007-06-05",
     phone: "+1 (555) 748-2296",
+    address: "123 Main St",
+    location: "California, USA",
     country: "United States of America",
     cityState: "California, USA",
     postalCode: "ERT 52312",

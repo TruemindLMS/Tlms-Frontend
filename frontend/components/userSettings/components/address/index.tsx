@@ -24,14 +24,14 @@ const Address = ({ user }: { user: UserProps }) => {
       </button> */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Country" placeholder={user.country} value={user.country } />
-        <FormField label="State/City" placeholder={user.cityState} value={user.cityState } />
+        <FormField label="Country" placeholder={user.country} value={user.country} />
+        <FormField label="State/City" placeholder={user.cityState} value={user.cityState} />
         <FormField
           label="Street Address"
           placeholder="123 Main St"
-          value={ "123 Main St"}
+          value={"123 Main St"}
         />
-        <FormField label="Zip Code" placeholder={user.postalCode} value={user.postalCode } />
+        <FormField label="Zip Code" placeholder={user.postalCode} value={user.postalCode} />
       </div>
 
       {/* {isEditing && (
