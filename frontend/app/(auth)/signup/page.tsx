@@ -33,13 +33,6 @@ export default function SignupPage() {
         setError('')
     }
 
-    const splitFullName = (name: string) => {
-        const parts = name.trim().split(' ')
-        const firstName = parts[0] || ''
-        const lastName = parts.slice(1).join(' ') || ''
-        return { firstName, lastName }
-    }
-
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
@@ -74,17 +67,14 @@ export default function SignupPage() {
         setLoading(true)
 
         try {
-            const { firstName, lastName } = splitFullName(fullName)
+            console.log('📝 Registering user:', { email, fullName, role: selectedRole })
 
-            console.log('📝 Registering user:', { email, firstName, lastName, role: selectedRole })
 
-            // Register user with backend
             const registerResponse = await registerUser({
                 email,
                 password,
                 confirmPassword,
-                firstName,
-                lastName,
+                fullName: fullName,
                 role: selectedRole
             })
 
@@ -93,22 +83,22 @@ export default function SignupPage() {
             if (registerResponse.message || registerResponse.success) {
                 // Store user data temporarily
                 localStorage.setItem('pendingUserData', JSON.stringify({
-                    fullName: `${firstName} ${lastName}`,
+                    fullName: fullName,
                     email: email,
                     role: selectedRole
                 }))
 
                 console.log('📧 Sending OTP to:', email)
 
-                // Send OTP
+
                 const otpResponse = await sendOtp(email)
                 console.log('✅ OTP response:', otpResponse)
 
-                // IMPORTANT: Use window.location.href instead of router.push for more reliable navigation
+
                 const otpUrl = `/verify-otp?email=${encodeURIComponent(email)}&role=${encodeURIComponent(selectedRole)}`
                 console.log('🔀 Redirecting to:', otpUrl)
 
-                // Force navigation with window.location
+
                 window.location.href = otpUrl
 
             } else {
@@ -119,13 +109,13 @@ export default function SignupPage() {
         } catch (err: any) {
             console.error('❌ Signup error:', err)
 
-            // Handle specific error messages
+
             if (err.message?.includes('already exists') || err.message?.includes('duplicate')) {
                 setError('An account with this email already exists. Please sign in instead.')
             } else if (err.message?.includes('network') || err.message?.includes('fetch')) {
                 setError('Network error. Cannot connect to server. Please check your connection.')
             } else if (err.message?.includes('OTP') || err.message?.includes('otp')) {
-                // If OTP sending fails, still redirect to OTP page with a message
+
                 console.warn('⚠️ OTP sending failed but continuing to verification page')
                 const otpUrl = `/verify-otp?email=${encodeURIComponent(email)}&role=${encodeURIComponent(selectedRole)}&error=otp-failed`
                 window.location.href = otpUrl
@@ -470,7 +460,7 @@ export default function SignupPage() {
                                         </span>
                                     </button>
                                 </div>
-                                s
+
                                 {/* Sign In Link */}
                                 <p className="text-center text-sm text-gray-600">
                                     Already have an account?{' '}

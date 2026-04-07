@@ -1,4 +1,3 @@
-
 const API_BASE_URL = 'https://tims-backend-11dz.onrender.com/api'
 
 // Helper to safely parse JSON responses
@@ -10,8 +9,6 @@ async function parseResponse(response: Response) {
         return { message: text || response.statusText }
     }
 }
-
-
 
 export interface ApiError {
     status: number
@@ -83,8 +80,7 @@ export interface RegisterRequest {
     email: string
     password: string
     confirmPassword: string
-    firstName: string
-    lastName: string
+    fullName: string  // ✅ FIXED: Changed from firstName + lastName to fullName
     role: string
 }
 
@@ -212,12 +208,18 @@ export async function loginUser(email: string, password: string): Promise<LoginR
 
 export async function registerUser(userData: RegisterRequest): Promise<ApiResponse> {
     try {
-        logApiCall('POST', '/Auth/register', { email: userData.email, role: userData.role })
+        logApiCall('POST', '/Auth/register', { email: userData.email, role: userData.role, fullName: userData.fullName })
 
         const response = await fetch(`${API_BASE_URL}/Auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData),
+            body: JSON.stringify({
+                email: userData.email,
+                password: userData.password,
+                confirmPassword: userData.confirmPassword,
+                fullName: userData.fullName,  // ✅ FIXED: Sending fullName instead of firstName/lastName
+                role: userData.role
+            }),
         })
         const data = await parseResponse(response)
 
@@ -232,7 +234,7 @@ export async function registerUser(userData: RegisterRequest): Promise<ApiRespon
 
         // Store pending user data for OTP verification
         localStorage.setItem('pendingUserData', JSON.stringify({
-            fullName: `${userData.firstName} ${userData.lastName}`,
+            fullName: userData.fullName,
             email: userData.email,
             role: userData.role
         }))
