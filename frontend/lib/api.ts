@@ -602,12 +602,7 @@ export const courseApi = {
     },
 
     enroll: async (courseId: string): Promise<{ success: boolean }> => {
-        try {
-            return await apiClient(`/Courses/${courseId}/enroll`, { method: 'POST' })
-        } catch (error) {
-            console.warn(`Enrollment API for ${courseId} failed or is not yet implemented. Falling back to local storage.`);
-            return { success: true };
-        }
+        return await apiClient(`/Courses/${courseId}/enroll`, { method: 'POST' })
     },
 
     getEnrolledCourses: async (): Promise<Course[]> => {
@@ -615,11 +610,11 @@ export const courseApi = {
     },
 
     updateLessonProgress: async (lessonId: string, completed: boolean): Promise<void> => {
-        return apiClient(`/Courses/lessons/${lessonId}/progress`, { method: 'PUT', body: JSON.stringify({ completed }) })
+        return apiClient(`/Progress/lessons/${lessonId}/complete`, { method: 'POST', body: JSON.stringify({ completed }) })
     },
 
     getCourseProgress: async (courseId: string): Promise<{ progress: number; completedLessons: string[] }> => {
-        return apiClient(`/Courses/${courseId}/progress`, { silent: true })
+        return apiClient(`/Progress/courses/${courseId}`, { silent: true })
     }
 }
 
