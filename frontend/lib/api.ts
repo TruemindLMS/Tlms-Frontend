@@ -359,14 +359,14 @@ export async function forgotPassword(email: string): Promise<ApiResponse> {
     }
 }
 
-export async function resetPassword(token: string, newPassword: string): Promise<ApiResponse> {
+export async function resetPassword(email: string, token: string, newPassword: string): Promise<ApiResponse> {
     try {
-        logApiCall('POST', '/Auth/reset-password', { token: '***' })
+        logApiCall('POST', '/Auth/reset-password', { email, token: '***' })
 
         const response = await fetch(`${API_BASE_URL}/Auth/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token, newPassword, confirmPassword: newPassword }),
+            body: JSON.stringify({ email, token, newPassword, confirmPassword: newPassword }),
         })
         const data = await parseResponse(response)
 
@@ -459,9 +459,12 @@ export function setUser(user: any): void {
 }
 
 export function getUserFullName(): string {
-    const user = getUser()
-    if (user) return `${user.firstName || ''} ${user.lastName || ''}`.trim()
-    return localStorage.getItem('userFullName') || ''
+    const user = getUser();
+    if (user) {
+        const name = user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim();
+        if (name) return name;
+    }
+    return localStorage.getItem('userFullName') || '';
 }
 
 export function getUserEmail(): string {
@@ -542,19 +545,48 @@ export function mapBackendKeys(obj: any): any {
     return obj;
 }
 
+// Helper to provide fallback images for courses
+function applyFallbackCourseImage<T extends Course | Course[]>(data: T): T {
+    const genericImages = [
+        "/img/frontend.jpg",
+        "/img/grah.jpg",
+        "/img/frontend.jpg",
+        "/img/grah.jpg",
+        "/img/asp.net.jpg",
+        "/img/frontend.jpg",
+    ];
+
+    if (Array.isArray(data)) {
+        return data.map(course => {
+            if (!course.imageUrl) {
+                const code = (course.id || course.title || "course").split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                return { ...course, imageUrl: genericImages[code % genericImages.length] };
+            }
+            return course;
+        }) as T;
+    } else if (data && typeof data === 'object') {
+        const course = data as Course;
+        if (!course.imageUrl) {
+            const code = (course.id || course.title || "course").split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            return { ...course, imageUrl: genericImages[code % genericImages.length] } as T;
+        }
+    }
+    return data;
+}
+
 // ==================== Course API Endpoints ====================
 
 export const courseApi = {
     getAll: async (): Promise<Course[]> => {
         const res = await apiClient('/Courses')
         const data = res?.data || res || []
-        return mapBackendKeys(data)
+        return applyFallbackCourseImage(mapBackendKeys(data))
     },
 
     getById: async (courseId: string): Promise<Course> => {
         const res = await apiClient(`/Courses/${courseId}`)
         const data = res?.data || res
-        return mapBackendKeys(data)
+        return applyFallbackCourseImage(mapBackendKeys(data))
     },
 
     create: async (courseData: CreateCourseRequestDto): Promise<Course> => {
@@ -656,7 +688,7 @@ export const cloudinaryApi = {
         formData.append('File', file)
         formData.append('Title', title)
         formData.append('Description', description)
-        
+
         const token = getAuthToken()
         const headers: Record<string, string> = {}
         if (token) headers['Authorization'] = `Bearer ${token}`
@@ -671,7 +703,7 @@ export const cloudinaryApi = {
     uploadProfileImage: async (file: File) => {
         const formData = new FormData()
         formData.append('File', file)
-        
+
         const token = getAuthToken()
         const headers: Record<string, string> = {}
         if (token) headers['Authorization'] = `Bearer ${token}`
