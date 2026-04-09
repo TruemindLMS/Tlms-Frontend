@@ -203,7 +203,7 @@ function FirstTimeDashboard({ onStartCourse, userName }: { onStartCourse: () => 
 
   return (
     <main className="p-1 lg:p-6 md:max-w-7xl mx-auto">
-      <div className="relative bg-gradient-to-r from-primary-900 to-primary-700 text-white rounded-2xl p-6 lg:p-8 mb-8 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-2xl p-6 lg:p-8 mb-8 overflow-hidden">
         <div className="relative z-10">
           <p className="text-sm mb-2 opacity-80">Welcome, {userName}! 👋</p>
           <h2 className="text-2xl lg:text-3xl font-bold mb-4 leading-snug">

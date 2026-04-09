@@ -643,7 +643,7 @@ export default function Topnavv({ onMenuClick, sidebarCollapsed = false }: Topna
 
                             <div className="pt-4 border-t border-gray-200">
                                 <Link
-                                    href="/dashboard/profile"
+                                    href="/dashboard/userprofile"
                                     className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                                     onClick={handleCloseProfile}
                                 >
