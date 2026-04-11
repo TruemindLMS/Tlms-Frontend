@@ -90,7 +90,7 @@ export default function CertificatePage() {
                         </div>
                         <span className="text-2xl font-bold text-gray-900 dark:text-white">4</span>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">Courses <br/> Enrolled</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Courses <br /> Enrolled</p>
                 </div>
 
                 <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
@@ -124,7 +124,7 @@ export default function CertificatePage() {
                 </div>
             </div>
 
-           <div className="mb-8 flex">
+            <div className="mb-8 flex">
                 <BookOpen className="text-green-600 dark:text-green-400" size={15} />
                 <h1 className=" md:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                     Course Progress (5 Courses)
@@ -133,192 +133,192 @@ export default function CertificatePage() {
 
             {/* Courses Grid */}
 
-                <div className="w-full flex-col rounded-2xl space-y-5  p-4">
+            <div className="w-full flex-col rounded-2xl space-y-5  p-2">
 
-                 <div className='w-full max-w-3xl bg-white rounded-2xl p-6 shadow-sm'>
+                <div className='w-full max-w-7xl bg-white rounded-2xl p-4 shadow-sm'>
                     <div className='flex items-start justify-between'>
-                    
-                      <div className='flex items-start gap-3'>
-                        <CheckCircle className='text-green-600 mt-1' size={15} />
-                        <div>
-                            <h2 className='text-base font-semibold text-gray-800 '>UI/UX Design Fundamentals </h2>
-                            <p className='text-sm text-gray-500 '>Tunde Adebayo</p>
-                        </div>
-                        </div>
-                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
-                        </div>
-                              
-                                {/* Progress Info */}
-                         <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
-                             <span>12/12 Lessons</span>
-                            <span className="text-green-700 font-medium">100%</span>
-      </div>
-       
 
-
-             {/* Progress Bar */}
-            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">  
-          <div
-          className="h-full bg-green-700 rounded-full"
-          style={{ width: `${100}%`}}
-         />
-            
-            </div>
-            </div>
-
-            {/* Additional courses can be added here following the same structure */}
-             <div className='w-full max-w-3xl bg-white rounded-2xl p-6 shadow-sm'>
-                    <div className='flex items-start justify-between'>
-                    
-                      <div className='flex items-start gap-3'>
-                        <CheckCircle className='text-green-600 mt-1' size={15} />
-                        <div>
-                            <h2 className='text-base font-semibold text-gray-800 '>Design Systems & Component Libraries </h2>
-                            <p className='text-sm text-gray-500 '>Tunde Adebayo</p>
-                        </div>
-                        </div>
-                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
-                        </div>
-                              
-                                {/* Progress Info */}
-                         <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
-                             <span>8/8Lessons</span>
-                            <span className="text-green-700 font-medium">100%</span>
-      </div>
-       
-
-
-             {/* Progress Bar */}
-            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">  
-          <div
-          className="h-full bg-green-700 rounded-full"
-          style={{ width: `${100}%`}}
-         />
-            
-            </div>
-            </div>
-
-            {/* Additional courses can be added here following the same structure */}
-             <div className='w-full max-w-3xl bg-white rounded-2xl p-6 shadow-sm'>
-                    <div className='flex items-start justify-between'>
-                    
-                      <div className='flex items-start gap-3'>
-                        <BookOpen className='text-green-600 mt-1' size={15} />
-                        <div>
-                            <h2 className='text-base font-semibold text-gray-800 '>User Research & Testing  </h2>
-                            <p className='text-sm text-gray-500 '>Amaka Obi </p>
-                        </div>
-                        </div>
-                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
-                        </div>
-                              
-                                {/* Progress Info */}
-                         <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
-                             <span>7/10 Lessons</span>
-                            <span className="text-green-700 font-medium">72%</span>
-      </div>
-       
-
-
-             {/* Progress Bar */}
-            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">  
-          <div
-          className="h-full bg-green-700 rounded-full"
-          style={{ width: `${72}%`}}
-         />
-            
-            </div>
-
-            <div className='flex gap-1'>
-                <Clock className='text-gray-300 text-xs mt-1' size={10}/>
-                <p className='text-xs text-gray-500'>3 lessons left</p>
-            </div>
-
-            </div>
-
-
-            {/* Additional courses can be added here following the same structure */}
-             <div className='w-full max-w-3xl bg-white rounded-2xl p-6 shadow-sm'>
-                    <div className='flex items-start justify-between'>
-                    
-                      <div className='flex items-start gap-3'>
-                        <BookOpen className='text-green-600 mt-1' size={15} />
-                        <div>
-                            <h2 className='text-base font-semibold text-gray-800 '>Prototyping with Figma  </h2>
-                            <p className='text-sm text-gray-500 '>Tunde Adebayo</p>
-                        </div>
-                        </div>
-                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
-                        </div>
-                              
-                                {/* Progress Info */}
-                         <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
-                             <span>7/15 Lessons</span>
-                            <span className="text-green-700 font-medium">45%</span>
-      </div>
-       
-
-
-             {/* Progress Bar */}
-            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">  
-          <div
-          className="h-full bg-green-700 rounded-full"
-          style={{ width: `${45}%`}}
-         />
-            
-            </div>
-
-            <div className='flex gap-2'>
-                <Clock className='text-gray-300 text-xs mt-1' size={10}/>
-                <p className='text-xs text-gray-500'>8 lessons left</p>
-            </div>
-
-            </div>
-
-            {/* Additional courses can be added here following the same structure */}
-             <div className='w-full max-w-3xl bg-white rounded-2xl p-6 shadow-sm'>
-                    <div className='flex items-start justify-between'>
-                    
-                      <div className='flex items-start gap-3'>
-                        <BookOpen className='text-green-600 mt-1' size={15} />
-                        <div>
-                            <h2 className='text-base font-semibold text-gray-800 '>Interaction Design Principles </h2>
-                            <p className='text-sm text-gray-500 '>Amaka Obi </p>
-                        </div>
-                        </div>
-                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
-                        </div>
-                              
-                                {/* Progress Info */}
-                                <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
-                             <span>2/15 Lessons</span>
-                            <span className="text-green-700 font-medium">13%</span>
+                        <div className='flex items-start gap-3'>
+                            <CheckCircle className='text-green-600 mt-1' size={15} />
+                            <div>
+                                <h2 className='text-base font-semibold text-gray-800 '>UI/UX Design Fundamentals </h2>
+                                <p className='text-sm text-gray-500 '>Tunde Adebayo</p>
                             </div>
-       
+                        </div>
+                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
+                    </div>
+
+                    {/* Progress Info */}
+                    <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
+                        <span>12/12 Lessons</span>
+                        <span className="text-green-700 font-medium">100%</span>
+                    </div>
 
 
-             {/* Progress Bar */}
-            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">  
-          <div
-          className="h-full bg-green-700 rounded-full"
-          style={{ width: `${13}%`}}/>
-            
-            </div>
 
-            <div className='flex gap-2'>
-                <Clock className='text-gray-300 text-xs mt-1' size={10}/>
-                <p className='text-xs text-gray-500'>13 lessons left</p>
-            </div>
+                    {/* Progress Bar */}
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-green-700 rounded-full"
+                            style={{ width: `${100}%` }}
+                        />
+
+                    </div>
+                </div>
+
+                {/* Additional courses can be added here following the same structure */}
+                <div className='w-full max-w-7xl bg-white rounded-2xl p-6 shadow-sm'>
+                    <div className='flex items-start justify-between'>
+
+                        <div className='flex items-start gap-3'>
+                            <CheckCircle className='text-green-600 mt-1' size={15} />
+                            <div>
+                                <h2 className='text-base font-semibold text-gray-800 '>Design Systems & Component Libraries </h2>
+                                <p className='text-sm text-gray-500 '>Tunde Adebayo</p>
+                            </div>
+                        </div>
+                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
+                    </div>
+
+                    {/* Progress Info */}
+                    <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
+                        <span>8/8Lessons</span>
+                        <span className="text-green-700 font-medium">100%</span>
+                    </div>
 
 
-            </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-green-700 rounded-full"
+                            style={{ width: `${100}%` }}
+                        />
+
+                    </div>
+                </div>
+
+                {/* Additional courses can be added here following the same structure */}
+                <div className='w-full max-w-7xl bg-white rounded-2xl p-6 shadow-sm'>
+                    <div className='flex items-start justify-between'>
+
+                        <div className='flex items-start gap-3'>
+                            <BookOpen className='text-green-600 mt-1' size={15} />
+                            <div>
+                                <h2 className='text-base font-semibold text-gray-800 '>User Research & Testing  </h2>
+                                <p className='text-sm text-gray-500 '>Amaka Obi </p>
+                            </div>
+                        </div>
+                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
+                    </div>
+
+                    {/* Progress Info */}
+                    <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
+                        <span>7/10 Lessons</span>
+                        <span className="text-green-700 font-medium">72%</span>
+                    </div>
 
 
+
+                    {/* Progress Bar */}
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-green-700 rounded-full"
+                            style={{ width: `${72}%` }}
+                        />
+
+                    </div>
+
+                    <div className='flex gap-1'>
+                        <Clock className='text-gray-300 text-xs mt-1' size={10} />
+                        <p className='text-xs text-gray-500'>3 lessons left</p>
+                    </div>
+
+                </div>
+
+
+                {/* Additional courses can be added here following the same structure */}
+                <div className='w-full max-w-7xl bg-white rounded-2xl p-6 shadow-sm'>
+                    <div className='flex items-start justify-between'>
+
+                        <div className='flex items-start gap-3'>
+                            <BookOpen className='text-green-600 mt-1' size={15} />
+                            <div>
+                                <h2 className='text-base font-semibold text-gray-800 '>Prototyping with Figma  </h2>
+                                <p className='text-sm text-gray-500 '>Tunde Adebayo</p>
+                            </div>
+                        </div>
+                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
+                    </div>
+
+                    {/* Progress Info */}
+                    <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
+                        <span>7/15 Lessons</span>
+                        <span className="text-green-700 font-medium">45%</span>
+                    </div>
+
+
+
+                    {/* Progress Bar */}
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-green-700 rounded-full"
+                            style={{ width: `${45}%` }}
+                        />
+
+                    </div>
+
+                    <div className='flex gap-2'>
+                        <Clock className='text-gray-300 text-xs mt-1' size={10} />
+                        <p className='text-xs text-gray-500'>8 lessons left</p>
+                    </div>
+
+                </div>
+
+                {/* Additional courses can be added here following the same structure */}
+                <div className='w-full max-w-7xl bg-white rounded-2xl p-4 shadow-sm'>
+                    <div className='flex items-start justify-between'>
+
+                        <div className='flex items-start gap-3'>
+                            <BookOpen className='text-green-600 mt-1' size={15} />
+                            <div>
+                                <h2 className='text-base font-semibold text-gray-800 '>Interaction Design Principles </h2>
+                                <p className='text-sm text-gray-500 '>Amaka Obi </p>
+                            </div>
+                        </div>
+                        <div className='text-sm font-medium text-gray-800 rounded-full flex justify-around  w-20 h-6 bg-green-600'>Certified</div>
+                    </div>
+
+                    {/* Progress Info */}
+                    <div className="flex justify-between items-center mt-6 mb-2 text-sm text-gray-500">
+                        <span>2/15 Lessons</span>
+                        <span className="text-green-700 font-medium">13%</span>
+                    </div>
+
+
+
+                    {/* Progress Bar */}
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-green-700 rounded-full"
+                            style={{ width: `${13}%` }} />
+
+                    </div>
+
+                    <div className='flex gap-2'>
+                        <Clock className='text-gray-300 text-xs mt-1' size={10} />
+                        <p className='text-xs text-gray-500'>13 lessons left</p>
+                    </div>
 
 
                 </div>
 
-                   
+
+
+
+            </div>
+
+
 
         </div>
     )
