@@ -170,7 +170,7 @@ export default function TeamPage() {
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
               TEAM
             </h1>
-            <p className="text-gray-500 text-sm mt-1">Manage your teams and collaborators</p>
+            <p className="text-gray-500 text-sm mt-1">team page coming soon demo live</p>
           </div>
           <div className="flex gap-3">
             <button
@@ -374,7 +374,7 @@ export default function TeamPage() {
               <input
                 type="text"
                 placeholder="e.g., TEAM-CODE-123 or https://..."
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-text focus:border-transparent bg-white dark:bg-gray-900"
+                className="w-full px-3 py-2 border border-gray  -300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-text focus:border-transparent bg-white dark:bg-gray-900"
               />
             </div>
             <div className="flex justify-end space-x-3 mt-6">

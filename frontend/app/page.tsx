@@ -13,8 +13,11 @@ import Start from "@/components/onboarding/start"
 import ChatButton from "@/components/support/ChatButton"
 
 export const metadata: Metadata = {
-  title: "team-india ",
+  title: "team-india lms ",
   description: " innovation",
+  icons: {
+    icon: "/img/logo.png",
+  },
 
 }
 
