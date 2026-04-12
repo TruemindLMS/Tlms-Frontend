@@ -16,7 +16,7 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
   ({ label, error, placeholder, ...props }, ref) => {
     return (
       <div className="flex flex-col gap-2 w-full">
-        <Label className=" text-base lg:text-xl text-[#1C2A39] font-normal ">
+        <Label className=" text-sm font-medium text-gray-700 mb-2 ">
           {label}{" "}
         </Label>
         <Input

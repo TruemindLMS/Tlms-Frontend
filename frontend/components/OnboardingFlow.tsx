@@ -449,7 +449,7 @@ function StepOne({ bio, setBio, profilePicture, setProfilePicture, profilePictur
                                 className="hidden"
                                 disabled={loading}
                             />
-                        </label>
+                        </label> 
                     </div>
 
                     <div>
