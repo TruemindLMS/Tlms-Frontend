@@ -70,7 +70,7 @@ const courses: Course[] = [
 
 export default function CertificatePage() {
     return (
-        <div className='ml-20'>
+        <div className='lg:ml-20 '>
             {/* Header */}
             <div className="mb-8">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
