@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://tims-backend-11dz.onrender.com/api'
+export const API_BASE_URL = 'https://tims-backend-11dz.onrender.com/api'
 
 // Helper to safely parse JSON responses
 async function parseResponse(response: Response) {
@@ -383,6 +383,7 @@ export async function resetPassword(email: string, token: string, newPassword: s
     }
 }
 
+
 export async function logoutUser(): Promise<void> {
     try {
         const token = getAuthToken()
@@ -487,7 +488,8 @@ export interface ApiClientOptions extends RequestInit {
 
 export async function apiClient(endpoint: string, options: ApiClientOptions = {}) {
     const token = getAuthToken()
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+    const isFormData = options.body instanceof FormData;
+    const headers: Record<string, string> = isFormData ? {} : { 'Content-Type': 'application/json' }
     if (token) headers['Authorization'] = `Bearer ${token}`
     if (options.headers) {
         const customHeaders = options.headers as Record<string, string>
@@ -621,18 +623,32 @@ export const courseApi = {
 // ==================== Profile API ====================
 
 export const profileApi = {
-    get: async () => {
-        try {
-            return await apiClient('/Profile')
-        } catch (error: any) {
-            console.error('Profile API error:', error?.message || error)
-            throw error
-        }
-    },
-    update: async (profileData: any) => {
-        return apiClient('/Profile', { method: 'PUT', body: JSON.stringify(profileData) })
-    },
-}
+  get: async () => {
+    try {
+      return await apiClient("/Profile");
+    } catch (error: any) {
+      console.error("Profile API error:", error?.message || error);
+      throw error;
+    }
+  },
+//   update: async (profileData: any) => {
+//     return apiClient("/Profile", {
+//       method: "PUT",
+//       body: JSON.stringify(profileData),
+//     });
+//   },
+  update: async (profileData: FormData | object) => {
+    const isFormData = profileData instanceof FormData;
+
+    return apiClient("/Profile", {
+      method: "PUT",
+      
+      headers: isFormData ? undefined : { "Content-Type": "application/json" },
+      body: isFormData ? profileData : JSON.stringify(profileData),
+    });
+  },
+};
+
 
 // ==================== Onboarding API ====================
 
