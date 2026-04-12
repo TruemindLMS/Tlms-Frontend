@@ -197,9 +197,8 @@ export default function CertificatePage() {
       </div>
 
       {/* Courses Grid */}
-
-      <div className="w-full flex-col rounded-2xl space-y-5  p-2">
-        <div className="w-full max-w-7xl bg-white rounded-2xl p-4 shadow-sm">
+      <div className="w-full flex-col rounded-2xl space-y-5 p-4">
+        <div className="w-full max-w-7xl bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
               <CheckCircle className="text-green-600 mt-1" size={15} />
@@ -229,8 +228,6 @@ export default function CertificatePage() {
             />
           </div>
         </div>
-
-        {/* Additional courses can be added here following the same structure */}
         <div className="w-full max-w-7xl bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
@@ -261,8 +258,6 @@ export default function CertificatePage() {
             />
           </div>
         </div>
-
-        {/* Additional courses can be added here following the same structure */}
         <div className="w-full max-w-7xl bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
