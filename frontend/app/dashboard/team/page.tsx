@@ -212,7 +212,7 @@ export default function TeamPage() {
 
   if (selectedTeam && selectedTeam.isOpenGroup) {
     return (
-      <section className="bg-cover ml-1 lg:ml-1 md:ml-5 bg-center bg-no-repeat pr-8 min-h-screen" style={{ backgroundImage: "url('/img/tback.png')" }}>
+      <section className="bg-cover ml-5 lg:ml-1 md:ml-5 bg-center bg-no-repeat pr-8 min-h-screen" style={{ backgroundImage: "url('/img/tback.png')" }}>
         {/* Back button */}
         <button
           onClick={() => setSelectedTeam(null)}
