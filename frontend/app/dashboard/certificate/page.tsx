@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState, useMemo } from "react";
 import {
     BookOpen,
     Clock,
@@ -56,8 +57,105 @@ const earnedCertificates = [
 ];
 
 export default function CertificatePage() {
+    const [courses, setCourses] = useState<CourseWithProgress[]>([]);
+    const [enrolledCourses, setEnrolledCourses] = useState<CourseWithProgress[]>([]);
+    const [certifications, setCertifications] = useState(0);
+
+    // ✅ stable user id
+    const userId = useMemo(() => {
+        const user = getUser();
+        return user?.id || user?.email || "anonymous";
+    }, []);
+
+    const userCertKey = `userCertifications_${userId}`;
+    const enrolledKey = `enrolledCourses_${userId}`;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let enrolledCoursesList: CourseWithProgress[] = [];
+
+            try {
+                const fetchedCourses = await courseApi.getEnrolledCourses();
+
+                if (Array.isArray(fetchedCourses)) {
+                    const coursesWithProgress = await Promise.all(
+                        fetchedCourses.map(async (course: any) => {
+                            try {
+                                const progressData = await courseApi.getCourseProgress(course.id);
+
+                                return {
+                                    ...course,
+                                    progress: progressData?.progress ?? 0,
+                                };
+                            } catch {
+                                return { ...course, progress: 0 };
+                            }
+                        })
+                    );
+
+                    enrolledCoursesList = coursesWithProgress;
+
+                    if (typeof window !== "undefined") {
+                        localStorage.setItem(
+                            enrolledKey,
+                            JSON.stringify(enrolledCoursesList)
+                        );
+                    }
+                }
+            } catch {
+                console.warn("⚠️ Backend failed, using localStorage fallback");
+
+                if (typeof window !== "undefined") {
+                    const cached = localStorage.getItem(enrolledKey);
+                    enrolledCoursesList = cached ? JSON.parse(cached) : [];
+                }
+            }
+
+            setEnrolledCourses(enrolledCoursesList);
+
+            try {
+                const allCourses = await courseApi.getAll();
+                setCourses(allCourses);
+            } catch {
+                console.warn("Failed to fetch all courses");
+            }
+
+            // ✅ safe localStorage read
+            if (typeof window !== "undefined") {
+                const stored = localStorage.getItem(userCertKey);
+                setCertifications(parseInt(stored || "0"));
+            }
+        };
+
+        fetchData();
+    }, [enrolledKey, userCertKey]);
+
+    // ✅ STATS (optimized, no UI change)
+    const stats = useMemo(() => {
+        let completed = 0;
+        let totalProgress = 0;
+
+        for (const course of enrolledCourses) {
+            totalProgress += course.progress || 0;
+            if ((course.progress || 0) === 100) completed++;
+        }
+
+        const avgProgress =
+            enrolledCourses.length > 0
+                ? Math.floor(totalProgress / enrolledCourses.length)
+                : 0;
+
+        return {
+            enrolled: enrolledCourses.length,
+            completed,
+            inProgress: enrolledCourses.length - completed,
+            progress: avgProgress,
+            certifications,
+        };
+    }, [enrolledCourses, certifications]);
+
     return (
-        <div className="ml-20">
+        <div className="ml-20" style={{ backgroundImage: "url('/img/tback.png')" }}>
             {/* Header */}
             <div className="mb-8">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
