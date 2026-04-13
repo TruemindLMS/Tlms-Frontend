@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   BookOpen,
   CheckCircle,
@@ -34,23 +34,25 @@ const earnedCertificates = [
 export default function CertificatePage() {
   const [courses, setCourses] = useState<CourseWithProgress[]>([]);
   const [enrolledCourses, setEnrolledCourses] = useState<CourseWithProgress[]>([]);
+  const [certifications, setCertifications] = useState(0);
 
-  const getCurrentUserId = () => {
+  // ✅ stable user id
+  const userId = useMemo(() => {
     const user = getUser();
     return user?.id || user?.email || "anonymous";
-  };
+  }, []);
+
+  const userCertKey = `userCertifications_${userId}`;
+  const enrolledKey = `enrolledCourses_${userId}`;
 
   useEffect(() => {
     const fetchData = async () => {
-      const userId = getCurrentUserId();
-
       let enrolledCoursesList: CourseWithProgress[] = [];
 
       try {
-        // ✅ Fetch enrolled courses from backend
         const fetchedCourses = await courseApi.getEnrolledCourses();
 
-        if (fetchedCourses && Array.isArray(fetchedCourses)) {
+        if (Array.isArray(fetchedCourses)) {
           const coursesWithProgress = await Promise.all(
             fetchedCourses.map(async (course: any) => {
               try {
@@ -68,60 +70,67 @@ export default function CertificatePage() {
 
           enrolledCoursesList = coursesWithProgress;
 
-          // ✅ Cache fallback
-          localStorage.setItem(
-            `enrolledCourses_${userId}`,
-            JSON.stringify(enrolledCoursesList)
-          );
+          if (typeof window !== "undefined") {
+            localStorage.setItem(
+              enrolledKey,
+              JSON.stringify(enrolledCoursesList)
+            );
+          }
         }
       } catch {
         console.warn("⚠️ Backend failed, using localStorage fallback");
 
-        enrolledCoursesList = JSON.parse(
-          localStorage.getItem(`enrolledCourses_${userId}`) || "[]"
-        );
+        if (typeof window !== "undefined") {
+          const cached = localStorage.getItem(enrolledKey);
+          enrolledCoursesList = cached ? JSON.parse(cached) : [];
+        }
       }
 
-      // ✅ Set enrolled courses
       setEnrolledCourses(enrolledCoursesList);
+
       try {
         const allCourses = await courseApi.getAll();
         setCourses(allCourses);
       } catch {
         console.warn("Failed to fetch all courses");
       }
+
+      // ✅ safe localStorage read
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem(userCertKey);
+        setCertifications(parseInt(stored || "0"));
+      }
     };
 
     fetchData();
-  }, []);
+  }, [enrolledKey, userCertKey]);
 
-  // ✅ STATS LOGIC (clean + reusable)
-  const userId = getCurrentUserId();
-  const userCertKey = `userCertifications_${userId}`;
+  // ✅ STATS (optimized, no UI change)
+  const stats = useMemo(() => {
+    let completed = 0;
+    let totalProgress = 0;
 
-  let completed = 0;
-  let totalProgress = 0;
+    for (const course of enrolledCourses) {
+      totalProgress += course.progress || 0;
+      if ((course.progress || 0) === 100) completed++;
+    }
 
-  for (const course of enrolledCourses) {
-    totalProgress += course.progress || 0;
-    if ((course.progress || 0) === 100) completed++;
-  }
+    const avgProgress =
+      enrolledCourses.length > 0
+        ? Math.floor(totalProgress / enrolledCourses.length)
+        : 0;
 
-  const avgProgress =
-    enrolledCourses.length > 0
-      ? Math.floor(totalProgress / enrolledCourses.length)
-      : 0;
-
-  const stats = {
-    enrolled: enrolledCourses.length,
-    completed,
-    inProgress: enrolledCourses.length - completed,
-    progress: avgProgress,
-    certifications: parseInt(localStorage.getItem(userCertKey) || "0"),
-  };
+    return {
+      enrolled: enrolledCourses.length,
+      completed,
+      inProgress: enrolledCourses.length - completed,
+      progress: avgProgress,
+      certifications,
+    };
+  }, [enrolledCourses, certifications]);
 
   return (
-    <div className="ml-20">
+    <div className="ml-20" style={{ backgroundImage: "url('/img/tback.png')" }}>
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
